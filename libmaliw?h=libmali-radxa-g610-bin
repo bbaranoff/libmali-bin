@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<title>libmaliw - aur.git - AUR Package Repositories</title>
+<meta name='generator' content='cgit v1.2.3-56-gcc08'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/static/css/cgit.css'/>
+<script type='text/javascript' src='/cgit.js'></script>
+<link rel='shortcut icon' href='/static/images/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='https://aur.archlinux.org/cgit/aur.git/atom/libmaliw?h=libmali-radxa-g610-bin' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://aur.archlinux.org/libmali-radxa-g610-bin.git/' title='aur.git Git repository'/>
+</head>
+<body>
+		<div id="archnavbar" class="anb-aur">
+			<div id="archnavbarlogo"><h1><a href="/" title="Return to the main page">Arch Linux User Repository</a></h1></div>
+			<div id="archnavbarmenu">
+				<ul id="archnavbarlist">
+					<li id="anb-home"><a href="https://www.archlinux.org/" title="Arch news, packages, projects and more">Home</a></li>
+					<li id="anb-packages"><a href="https://www.archlinux.org/packages/" title="Arch Package Database">Packages</a></li>
+					<li id="anb-forums"><a href="https://bbs.archlinux.org/" title="Community forums">Forums</a></li>
+					<li id="anb-wiki"><a href="https://wiki.archlinux.org/" title="Community documentation">Wiki</a></li>
+					<li id="anb-bugs"><a href="https://bugs.archlinux.org/" title="Report and track bugs">Bugs</a></li>
+					<li id="anb-security"><a href="https://security.archlinux.org/" title="Arch Linux Security Tracker">Security</a></li>
+					<li id="anb-aur"><a href="/" title="Arch Linux User Repository">AUR</a></li>
+					<li id="anb-download"><a href="https://www.archlinux.org/download/" title="Get Arch Linux">Download</a></li>
+				</ul>
+			</div>
+		</div><!-- #archnavbar -->
+<div id='cgit'><table id='header'>
+<tr>
+<td class='main'>AUR : libmali-radxa-g610-bin.git</td></tr>
+<tr><td class='sub'>AUR Package Repositories | click <a href='/pkgbase/libmali-radxa-g610-bin/'>here</a> to return to the package base details page</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a href='/cgit/aur.git/?h=libmali-radxa-g610-bin'>summary</a><a href='/cgit/aur.git/log/libmaliw?h=libmali-radxa-g610-bin'>log</a><a class='active' href='/cgit/aur.git/tree/libmaliw?h=libmali-radxa-g610-bin'>tree</a><a href='/cgit/aur.git/commit/libmaliw?h=libmali-radxa-g610-bin'>commit</a><a href='/cgit/aur.git/diff/libmaliw?h=libmali-radxa-g610-bin'>diff</a><a href='/cgit/aur.git/stats/libmaliw?h=libmali-radxa-g610-bin'>stats</a></td><td class='form'><form class='right' method='get' action='/cgit/aur.git/log/libmaliw'>
+<input type='hidden' name='h' value='libmali-radxa-g610-bin'/><select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='search' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='path'>path: <a href='/cgit/aur.git/tree/?h=libmali-radxa-g610-bin'>root</a>/<a href='/cgit/aur.git/tree/libmaliw?h=libmali-radxa-g610-bin'>libmaliw</a></div><div class='content'>blob: 03f667ad50b62be8916d3d338d60d9ae8e9ca52f (<a href='/cgit/aur.git/plain/libmaliw?h=libmali-radxa-g610-bin'>plain</a>)
+<table summary='blob content' class='blob'>
+<tr><td class='linenumbers'><pre><a id='n1' href='#n1'>1</a>
+<a id='n2' href='#n2'>2</a>
+<a id='n3' href='#n3'>3</a>
+<a id='n4' href='#n4'>4</a>
+<a id='n5' href='#n5'>5</a>
+<a id='n6' href='#n6'>6</a>
+<a id='n7' href='#n7'>7</a>
+<a id='n8' href='#n8'>8</a>
+<a id='n9' href='#n9'>9</a>
+<a id='n10' href='#n10'>10</a>
+<a id='n11' href='#n11'>11</a>
+<a id='n12' href='#n12'>12</a>
+<a id='n13' href='#n13'>13</a>
+<a id='n14' href='#n14'>14</a>
+<a id='n15' href='#n15'>15</a>
+<a id='n16' href='#n16'>16</a>
+<a id='n17' href='#n17'>17</a>
+<a id='n18' href='#n18'>18</a>
+</pre></td>
+<td class='lines'><pre><code>#!/bin/bash
+APP=$(which $1)
+ARGS=${&#64;:2}
+HASRPATH=$(chrpath -l $APP | grep -o /usr/lib)
+export LIBGL_DEEPBIND=0
+export LD_LIBRARY_PATH=&quot;/usr/lib/gl4es:/usr/lib/libmali/wayland:$LD_LIBRARY_PATH&quot;
+# linux linker loads the shared libs in the order of 1. RPATH of the elf, then LD_LIBRARY_PATH
+# if a binary has RPATH pointed out to /usr/lib, then this causes system GL libraries to load
+# in such a case we load the app directly with linker ommitting the rpath of /usr/lib
+echo $HASRPATH
+if [ -z $HASRPATH ]
+then
+    echo &quot;Running ${APP} on Wayland with libmali&quot;
+    exec $APP $ARGS
+else
+    echo &quot;Running ${APP} on Wayland with libmali using linker&quot;
+    exec /lib/ld-linux-aarch64.so.1 --inhibit-rpath :/usr/lib $APP $ARGS
+fi
+</code></pre></td></tr></table>
+</div> <!-- class=content -->
+<div id="footer">
+	<p>
+		Copyright &copy; 2004-2020 aurweb Development Team &ndash;
+		<strong>AUR packages are user produced content. Any use of the provided files is at your own risk.</strong>
+	</p>
+</div>
+</div> <!-- id=cgit -->
+</body>
+</html>
